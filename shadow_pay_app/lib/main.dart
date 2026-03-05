@@ -1,14 +1,8 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
-import 'Onboard/onboard_screen.dart';
-=======
-import 'screens/onboarding_screen.dart'; // عدلي المسار حسب اسم الملف عندك
->>>>>>> 1bd94fd2bbb3bd8cf36691500ee2ff63f696d827
+import 'screens/onboarding_screen.dart'; // استخدمي المسار الصحيح لملف onboarding واحد فقط
 
 void main() {
-  
   runApp(const MyApp());
-  
 }
 
 class MyApp extends StatelessWidget {
@@ -16,7 +10,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-<<<<<<< HEAD
     return MaterialApp(
       title: 'ShadowPay',
       debugShowCheckedModeBanner: false,
@@ -24,18 +17,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: Scaffold(
-        backgroundColor: Colors.white,
-        body: OnboardScreen(),
-      ),
+      home: const OnboardingScreen(), // استخدمي اسم الشاشة المناسب هنا
     );
   }
 }
-=======
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: OnboardingScreen(),
-    );
-  }
-}
->>>>>>> 1bd94fd2bbb3bd8cf36691500ee2ff63f696d827

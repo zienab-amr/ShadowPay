@@ -271,10 +271,7 @@ packages:
       sha256: c15605cd28af66339f8eb6fbe0e541bfe2d1b72d5825efc6598f3e0a31b9ad27
       url: "https://pub.dev"
     source: hosted
-<<<<<<< HEAD
     version: "6.0.2"
-=======
-    version: "7.0.2"
   plugin_platform_interface:
     dependency: transitive
     description:
@@ -283,7 +280,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.8"
->>>>>>> 1bd94fd2bbb3bd8cf36691500ee2ff63f696d827
   posix:
     dependency: transitive
     description:
