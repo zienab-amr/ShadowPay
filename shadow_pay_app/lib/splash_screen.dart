@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:shadow_pay_app/Onboard/home_screen.dart';
+import 'package:shadow_pay_app/main.dart';
+import 'Onboard/onboarding_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'Onboard/onboarding_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -15,6 +19,23 @@ class _SplashScreenState extends State<SplashScreen>
   late Animation<double> _slideAnimation;
   late Animation<double> _scaleAnimation;
 
+  Future<void> checkOnboarding() async {
+    final prefs = await SharedPreferences.getInstance();
+    bool seen = prefs.getBool('seenOnboard') ?? false;
+    if (seen) {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => HomeScreen()));
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => OnboardingScreen(),
+        ),
+      );
+    }
+  }
+
+
   @override
   void initState() {
     super.initState();
@@ -23,6 +44,11 @@ class _SplashScreenState extends State<SplashScreen>
       vsync: this,
       duration: const Duration(seconds: 4),
     );
+
+    Future.delayed(Duration(seconds: 4), () {
+      checkOnboarding();
+    });
+
 
     _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
@@ -47,7 +73,7 @@ class _SplashScreenState extends State<SplashScreen>
 
     _controller.forward();
 
-    // Navigation after 4 seconds
+
     Future.delayed(const Duration(seconds: 4), () {
       if (mounted) {
         Navigator.pushReplacement(
@@ -84,6 +110,7 @@ class _SplashScreenState extends State<SplashScreen>
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
+
     
     const Color backgroundColor = Color(0xFF101622); 
     const Color surfaceColor = Color(0xFF1A1F2F); 
@@ -96,13 +123,14 @@ class _SplashScreenState extends State<SplashScreen>
     const Color statusGreen = Color(0xFF34A853); 
     const Color progressBackground = Color(0xFF2A2F3F); 
 
+
     return Scaffold(
       backgroundColor: backgroundColor,
       body: Container(
         width: size.width,
         height: size.height,
         decoration: const BoxDecoration(
-          
+
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -119,10 +147,10 @@ class _SplashScreenState extends State<SplashScreen>
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              
+
               const Spacer(flex: 2),
 
-              
+
               ScaleTransition(
                 scale: _scaleAnimation,
                 child: Container(
@@ -254,7 +282,6 @@ class _SplashScreenState extends State<SplashScreen>
                 },
               ),
 
-              
               const Spacer(flex: 1),
 
               // SETTINGS and ENCRYPTED BY SHADOW PAY SECURELY - تحت خالص
@@ -273,7 +300,7 @@ class _SplashScreenState extends State<SplashScreen>
                   ),
                   SizedBox(height: 8),
 
-                  // ENCRYPTED BY SHADOW PAY SECURELY 
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -312,4 +339,4 @@ class _SplashScreenState extends State<SplashScreen>
       ),
     );
   }
-}
+
