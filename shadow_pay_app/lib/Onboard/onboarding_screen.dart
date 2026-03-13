@@ -181,6 +181,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             );
 
                       }
+
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF00BBA7), 

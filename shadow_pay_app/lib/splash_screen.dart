@@ -3,6 +3,7 @@ import 'package:shadow_pay_app/Onboard/home_screen.dart';
 import 'package:shadow_pay_app/main.dart';
 import 'Onboard/onboarding_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'Onboard/onboarding_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -34,6 +35,7 @@ class _SplashScreenState extends State<SplashScreen>
     }
   }
 
+
   @override
   void initState() {
     super.initState();
@@ -46,6 +48,7 @@ class _SplashScreenState extends State<SplashScreen>
     Future.delayed(Duration(seconds: 4), () {
       checkOnboarding();
     });
+
 
     _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
@@ -69,6 +72,7 @@ class _SplashScreenState extends State<SplashScreen>
     );
 
     _controller.forward();
+
 
     Future.delayed(const Duration(seconds: 4), () {
       if (mounted) {
@@ -106,16 +110,19 @@ class _SplashScreenState extends State<SplashScreen>
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    const Color backgroundColor = Color(0xFF101622);
-    const Color surfaceColor = Color(0xFF1A1F2F);
-    const Color darkBlueColor = Color(0xFF00BBA7);
-    const Color mediumBlueColor = Color(0xFF00D1B8);
-    const Color lightBlueColor = Color(0xFF66E0D8);
-    const Color textWhite = Color(0xFFFFFFFF);
+
+    
+    const Color backgroundColor = Color(0xFF101622); 
+    const Color surfaceColor = Color(0xFF1A1F2F); 
+    const Color darkBlueColor = Color(0xFF00BBA7);   
+    const Color mediumBlueColor = Color(0xFF00D1B8); 
+    const Color lightBlueColor = Color(0xFF66E0D8);  
+    const Color textWhite = Color(0xFFFFFFFF); 
     const Color textLightGray = Color(0xFFB0B8C5);
-    const Color textGray = Color(0xFF8E98A8);
-    const Color statusGreen = Color(0xFF34A853);
-    const Color progressBackground = Color(0xFF2A2F3F);
+    const Color textGray = Color(0xFF8E98A8); 
+    const Color statusGreen = Color(0xFF34A853); 
+    const Color progressBackground = Color(0xFF2A2F3F); 
+
 
     return Scaffold(
       backgroundColor: backgroundColor,
@@ -123,6 +130,7 @@ class _SplashScreenState extends State<SplashScreen>
         width: size.width,
         height: size.height,
         decoration: const BoxDecoration(
+
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -139,7 +147,9 @@ class _SplashScreenState extends State<SplashScreen>
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+
               const Spacer(flex: 2),
+
 
               ScaleTransition(
                 scale: _scaleAnimation,
@@ -290,7 +300,7 @@ class _SplashScreenState extends State<SplashScreen>
                   ),
                   SizedBox(height: 8),
 
-                  // ENCRYPTED BY SHADOW PAY SECURELY
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -329,4 +339,4 @@ class _SplashScreenState extends State<SplashScreen>
       ),
     );
   }
-}
+
