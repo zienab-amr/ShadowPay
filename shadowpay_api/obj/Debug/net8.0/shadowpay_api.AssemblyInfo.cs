@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("shadowpay_api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bbd0bdf6dedab40a674ef2fb03d475e9a9f19f4b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a0174658d5b877d21d9ca6f66cee3c3f8cf76b10")]
 [assembly: System.Reflection.AssemblyProductAttribute("shadowpay_api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("shadowpay_api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
