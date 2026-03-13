@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'screens/onboarding_screen.dart'; // عدلي المسار حسب اسم الملف عندك
+import 'splash_screen.dart';
+import 'Onboard/onboarding_screen.dart';
 
 void main() {
-  
   runApp(const MyApp());
-  
 }
 
 class MyApp extends StatelessWidget {
@@ -12,9 +11,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
+      title: 'ShadowPay',
       debugShowCheckedModeBanner: false,
-      home: OnboardingScreen(),
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+      ),
+      home: const SplashScreen(),
     );
   }
 }
