@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'splash_screen.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'Register/register_screen.dart';
 import 'Onboard/onboarding_screen.dart';
 
 void main() {
@@ -12,6 +14,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+       locale: Locale('en'),
+      supportedLocales: [
+    Locale('en'),
+    Locale('ar'),
+  ],
+  localizationsDelegates: [
+    GlobalMaterialLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+  ],
       title: 'ShadowPay',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
