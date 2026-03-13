@@ -5,203 +5,169 @@ class ThirdScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF081B33),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            children: [
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: Column(
+          children: [
+            const SizedBox(height: 40),
 
-              /// top bar
-              Row(
-                children: const [
-                  Icon(Icons.arrow_back, color: Colors.white),
-                  Spacer(),
-                  Text(
-                    "Security",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Spacer(),
-                ],
-              ),
-
-              const SizedBox(height: 40),
-
-              /// check icon
-              Container(
-                height: 120,
-                width: 120,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Color(0xFF1DBF73),
-                ),
-                child: const Icon(
-                  Icons.check,
-                  size: 60,
-                  color: Colors.white,
-                ),
-              ),
-
-              const SizedBox(height: 20),
-
-              /// page indicator
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+            SizedBox(
+              width: double.infinity,
+              height: 250, 
+              child: Stack(
+                alignment: Alignment.center,
                 children: [
-                  dot(false),
-                  dot(false),
-                  dot(true),
-                ],
-              ),
-
-              const SizedBox(height: 40),
-
-              /// title
-              const Text(
-                "Stay Protected",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 26,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-
-              const SizedBox(height: 10),
-
-              /// description
-              const Text(
-                "Take full control of your card security with instant freezing capabilities and real-time monitoring.",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white70,
-                  fontSize: 15,
-                ),
-              ),
-
-              const SizedBox(height: 30),
-
-              /// card 1
-              featureCard(
-                icon: Icons.ac_unit,
-                title: "Manual Freeze",
-                text:
-                    "Instantly lock your card yourself if you misplace it, anywhere in the world.",
-              ),
-
-              const SizedBox(height: 20),
-
-              /// card 2
-              featureCard(
-                icon: Icons.shield,
-                title: "Auto-Freeze",
-                text:
-                    "Smart AI protection that freezes your card instantly upon suspicious activity detection.",
-              ),
-
-              const Spacer(),
-
-              /// button
-              SizedBox(
-                width: double.infinity,
-                height: 55,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF2563EB),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
+                  Image.asset(
+                    'assets/thirdonboarding.png',
+                    width: double.infinity,
+                    height: 250,
+                    fit: BoxFit.cover,
+                    color: Colors.blue.withOpacity(0.5), 
+                    colorBlendMode: BlendMode.modulate, 
+                  ),
+                  Container(
+                    height: 120,
+                    width: 120,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Color(0xFF1DBF73),
+                    ),
+                    child: const Icon(
+                      Icons.check,
+                      size: 60,
+                      color: Colors.white,
                     ),
                   ),
-                  onPressed: () {},
-                  child: const Text(
-                    "Get Started →",
-                    style: TextStyle(fontSize: 18),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 40),
+
+            const Text(
+              "Stay Protected",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 26,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 10),
+
+            const Text(
+              "Take full control of your card security with instant freezing capabilities and real-time monitoring.",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white70,
+                fontSize: 15,
+              ),
+            ),
+
+            const SizedBox(height: 30),
+
+            // Feature Card 1
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: const Color(0xFF0F172A),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: HSLColor.fromColor(const Color(0xFF00BBA7))
+                      .withLightness(0.4)
+                      .toColor(),
+                  width: 2,
+                ),
+              ),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    backgroundColor: const Color(0xFF00BBA7).withOpacity(0.1),
+                    child: const Icon(
+                      Icons.lock,
+                      color: Color(0xFF00BBA7),
+                    ),
                   ),
+                  const SizedBox(width: 15),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Text(
+                          "Manual Freeze",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 6),
+                        Text(
+                          "Instantly lock your card yourself if you misplace it, anywhere in the world.",
+                          style: TextStyle(
+                            color: Colors.white70,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            // Feature Card 2
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: const Color(0xFF0F172A),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: HSLColor.fromColor(const Color(0xFF00BBA7))
+                      .withLightness(0.4)
+                      .toColor(),
+                  width: 2,
                 ),
               ),
-
-              const SizedBox(height: 10),
-
-              const Text(
-                "By continuing, you agree to ShadowPay's Security Terms & Conditions.",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white54,
-                  fontSize: 12,
-                ),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    backgroundColor: const Color(0xFF00BBA7).withOpacity(0.1),
+                    child: const Icon(
+                      Icons.shield,
+                      color: Color(0xFF00BBA7),
+                    ),
+                  ),
+                  const SizedBox(width: 15),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Text(
+                          "Auto-Freeze",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 6),
+                        Text(
+                          "Smart AI protection that freezes your card instantly upon suspicious activity detection.",
+                          style: TextStyle(
+                            color: Colors.white70,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
+            ),
 
-              const SizedBox(height: 20),
-            ],
-          ),
+            const SizedBox(height: 30),
+          ],
         ),
-      ),
-    );
-  }
-
-  /// dot indicator
-  Widget dot(bool active) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 4),
-      height: 8,
-      width: 8,
-      decoration: BoxDecoration(
-        color: active ? Colors.blue : Colors.white24,
-        shape: BoxShape.circle,
-      ),
-    );
-  }
-
-  /// feature card
-  Widget featureCard({
-    required IconData icon,
-    required String title,
-    required String text,
-  }) {
-    return Container(
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: const Color(0xFF0E2A4A),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.blue.withOpacity(0.2),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Icon(icon, color: Colors.blue),
-          ),
-          const SizedBox(width: 15),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 5),
-                Text(
-                  text,
-                  style: const TextStyle(
-                    color: Colors.white70,
-                    fontSize: 13,
-                  ),
-                ),
-              ],
-            ),
-          )
-        ],
       ),
     );
   }

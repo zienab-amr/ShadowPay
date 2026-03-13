@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'splash_screen.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'Register/register_screen.dart';
+import 'Onboard/onboarding_screen.dart';
+
 void main() {
   runApp(const MyApp());
 }

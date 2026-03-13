@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'screens/onboarding_screen.dart';
+import 'Onboard/onboarding_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -85,11 +85,11 @@ class _SplashScreenState extends State<SplashScreen>
     final size = MediaQuery.of(context).size;
 
     
-    const Color backgroundColor = Color(0xFF0A0E1A); 
+    const Color backgroundColor = Color(0xFF101622); 
     const Color surfaceColor = Color(0xFF1A1F2F); 
-    const Color darkBlueColor = Color(0xFF4A80F0);
-    const Color mediumBlueColor = Color(0xFF2D7AEE); 
-    const Color lightBlueColor = Color(0xFF6B8CFF); 
+    const Color darkBlueColor = Color(0xFF00BBA7);   
+    const Color mediumBlueColor = Color(0xFF00D1B8); 
+    const Color lightBlueColor = Color(0xFF66E0D8);  
     const Color textWhite = Color(0xFFFFFFFF); 
     const Color textLightGray = Color(0xFFB0B8C5);
     const Color textGray = Color(0xFF8E98A8); 
@@ -157,8 +157,8 @@ class _SplashScreenState extends State<SplashScreen>
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
                               colors: [
-                                Color(0xFF2D7AEE),
-                                Color(0xFF4A80F0),
+                                Color(0xFF00BBA7),
+                                Color(0xFF00BBA7),
                               ],
                             ),
                           ),
@@ -182,15 +182,25 @@ class _SplashScreenState extends State<SplashScreen>
               const SizedBox(height: 24),
 
               // ShadowPay
-              const Text(
-                'ShadowPay',
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: darkBlueColor,
-                  letterSpacing: 1,
-                ),
+              RichText(
                 textAlign: TextAlign.center,
+                text: const TextSpan(
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1,
+                  ),
+                  children: [
+                    TextSpan(
+                      text: 'Shadow',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    TextSpan(
+                      text: 'Pay',
+                      style: TextStyle(color: Color(0xFF00BBA7)),
+                    ),
+                  ],
+                ),
               ),
 
               const SizedBox(height: 2),

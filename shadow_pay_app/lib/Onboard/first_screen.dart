@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 
-class Onboardingone extends StatelessWidget {
-  const Onboardingone({super.key});
+class FirstScreen extends StatelessWidget {
+  const FirstScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF101622), // background-dark
+      backgroundColor: const Color(0xFF101622), 
       body: SafeArea(
         child: Column(
          
  children: [
             
           
-            // Illustration Section
             Expanded(
               flex: 3,
               child: Center(
@@ -24,15 +23,13 @@ class Onboardingone extends StatelessWidget {
                     aspectRatio: 1,
                     child: Stack(
                       children: [
-                        // Decorative Glow
                         Container(
                           decoration: BoxDecoration(
-                            color: const Color(0xFF0d59f2).withOpacity(0.2),
+                            color: const Color(0xFF00BBA7).withOpacity(0.2),
                             shape: BoxShape.circle,
                           ),
                         ),
 
-                        // Main Container
                         Container(
                           decoration: BoxDecoration(
                             color: const Color(0xFF1E293B).withOpacity(0.4),
@@ -44,7 +41,6 @@ class Onboardingone extends StatelessWidget {
                           child: Stack(
                             clipBehavior: Clip.none,
                             children: [
-                              // Background Fingerprint
                               Center(
                                 child: Icon(
                                   Icons.fingerprint,
@@ -53,7 +49,6 @@ class Onboardingone extends StatelessWidget {
                                 ),
                               ),
 
-                              // Floating Verified Card (Top Left)
                               Positioned(
                                 top: 32,
                                 left: 32,
@@ -80,7 +75,7 @@ class Onboardingone extends StatelessWidget {
                                         width: 8,
                                         height: 8,
                                         decoration: const BoxDecoration(
-                                          color: Color(0xFF10B981), // emerald
+                                          color: Color(0xFF10B981), 
                                           shape: BoxShape.circle,
                                         ),
                                       ),
@@ -99,7 +94,6 @@ class Onboardingone extends StatelessWidget {
                                 ),
                               ),
 
-                              // Floating Risk Card (Bottom Right)
                               Positioned(
                                 bottom: 48,
                                 right: 24,
@@ -141,7 +135,7 @@ class Onboardingone extends StatelessWidget {
                                             backgroundColor: Color(0xFF334155),
                                             valueColor:
                                                 AlwaysStoppedAnimation<Color>(
-                                              Color(0xFF0d59f2),
+                                              Color(0xFF00BBA7),
                                             ),
                                             minHeight: 6,
                                           ),
@@ -158,11 +152,11 @@ class Onboardingone extends StatelessWidget {
                                   width: 96,
                                   height: 96,
                                   decoration: BoxDecoration(
-                                    color: const Color(0xFF0d59f2),
+                                    color: const Color(0xFF00BBA7),
                                     borderRadius: BorderRadius.circular(16),
                                     boxShadow: [
                                       BoxShadow(
-                                        color: const Color(0xFF0d59f2).withOpacity(0.4),
+                                        color: const Color(0xFF00BBA7).withOpacity(0.4),
                                         blurRadius: 30,
                                         spreadRadius: 2,
                                       ),
