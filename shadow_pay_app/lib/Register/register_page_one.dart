@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:shadow_pay_app/l10n/app_localizations.dart';
 import 'register_page_two.dart';
 
 class RegisterPageOne extends StatefulWidget {
@@ -29,32 +30,6 @@ class _RegisterPageOneState extends State<RegisterPageOne> {
     super.dispose();
   }
 
-  String? _validateFullName(String? value) {
-    if (value == null || value.isEmpty) return "هذا الحقل مطلوب";
-    if (value.length < 3) return "الاسم يجب أن يكون 3 أحرف على الأقل";
-    return null;
-  }
-
-  String? _validateEmail(String? value) {
-    if (value == null || value.isEmpty) return "هذا الحقل مطلوب";
-    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-      return "البريد الإلكتروني غير صالح";
-    }
-    return null;
-  }
-
-  String? _validatePassword(String? value) {
-    if (value == null || value.isEmpty) return "هذا الحقل مطلوب";
-    if (value.length < 8) return "كلمة المرور يجب أن تكون 8 أحرف على الأقل";
-    return null;
-  }
-
-  String? _validateConfirm(String? value) {
-    if (value == null || value.isEmpty) return "هذا الحقل مطلوب";
-    if (value != passwordController.text) return "كلمة المرور غير متطابقة";
-    return null;
-  }
-
   void nextPage() {
     if (formKey.currentState!.validate()) {
       Navigator.push(
@@ -72,6 +47,8 @@ class _RegisterPageOneState extends State<RegisterPageOne> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -91,9 +68,9 @@ class _RegisterPageOneState extends State<RegisterPageOne> {
                 const SizedBox(height: 30),
                 const StepProgress(currentStep: 1),
                 const SizedBox(height: 10),
-                const Text(
-                  "الخطوة 1 من 2",
-                  style: TextStyle(color: Colors.white70, fontSize: 16),
+                Text(
+                  loc.step,
+                  style: const TextStyle(color: Colors.white70, fontSize: 16),
                 ),
                 const SizedBox(height: 30),
                 GlassCard(
@@ -101,9 +78,9 @@ class _RegisterPageOneState extends State<RegisterPageOne> {
                     key: formKey,
                     child: Column(
                       children: [
-                        const Text(
-                          "إنشاء حساب جديد",
-                          style: TextStyle(
+                        Text(
+                          loc.register,
+                          style: const TextStyle(
                             color: Colors.white,
                             fontSize: 26,
                             fontWeight: FontWeight.bold,
@@ -112,25 +89,22 @@ class _RegisterPageOneState extends State<RegisterPageOne> {
                         const SizedBox(height: 20),
                         buildField(
                           controller: fullNameController,
-                          hint: "الاسم الكامل",
+                          hint: loc.full_name,
                           icon: Icons.person,
-                          validator: _validateFullName,
                         ),
                         const SizedBox(height: 15),
                         buildField(
                           controller: emailController,
-                          hint: "البريد الإلكتروني",
+                          hint: loc.email,
                           icon: Icons.email,
-                          validator: _validateEmail,
                           keyboardType: TextInputType.emailAddress,
                         ),
                         const SizedBox(height: 15),
                         buildField(
                           controller: passwordController,
-                          hint: "كلمة المرور",
+                          hint: loc.password,
                           icon: Icons.lock,
                           obscure: !showPassword,
-                          validator: _validatePassword,
                           suffix: IconButton(
                             icon: Icon(
                               showPassword
@@ -144,10 +118,9 @@ class _RegisterPageOneState extends State<RegisterPageOne> {
                         const SizedBox(height: 15),
                         buildField(
                           controller: confirmController,
-                          hint: "تأكيد كلمة المرور",
+                          hint: loc.confirm_password,
                           icon: Icons.lock,
                           obscure: !showConfirm,
-                          validator: _validateConfirm,
                           suffix: IconButton(
                             icon: Icon(
                               showConfirm
@@ -172,9 +145,9 @@ class _RegisterPageOneState extends State<RegisterPageOne> {
                               ),
                               elevation: 5,
                             ),
-                            child: const Text(
-                              "التالي",
-                              style: TextStyle(fontSize: 18),
+                            child: Text(
+                              loc.next,
+                              style: const TextStyle(fontSize: 18),
                             ),
                           ),
                         )
@@ -196,13 +169,11 @@ class _RegisterPageOneState extends State<RegisterPageOne> {
     required IconData icon,
     bool obscure = false,
     Widget? suffix,
-    String? Function(String?)? validator,
     TextInputType? keyboardType,
   }) {
     return TextFormField(
       controller: controller,
       obscureText: obscure,
-      validator: validator,
       keyboardType: keyboardType,
       style: const TextStyle(color: Colors.white, fontSize: 16),
       decoration: InputDecoration(
@@ -245,11 +216,11 @@ class LogoWidget extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: Colors.white10,
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             color: Colors.black26,
             blurRadius: 10,
-            offset: const Offset(0, 5),
+            offset: Offset(0, 5),
           ),
         ],
       ),

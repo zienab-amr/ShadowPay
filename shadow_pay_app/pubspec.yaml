@@ -71,6 +71,7 @@ flutter:
 
 
   uses-material-design: true
+  generate: true
   assets:
     - assets/thirdonboarding.png
     - assets/icon/icon.png

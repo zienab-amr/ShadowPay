@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'splash_screen.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:shadow_pay_app/l10n/app_localizations.dart';
 import 'Register/register_screen.dart';
 import 'Onboard/onboarding_screen.dart';
 import 'ForgetPassword/forgot_password.dart';
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
        Locale('ar'),
   ],
   localizationsDelegates: [
+     AppLocalizations.delegate, 
     GlobalMaterialLocalizations.delegate,
     GlobalWidgetsLocalizations.delegate,
     GlobalCupertinoLocalizations.delegate,
