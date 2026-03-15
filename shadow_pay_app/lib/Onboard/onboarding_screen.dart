@@ -6,7 +6,6 @@ import 'second_screen.dart';
 import 'third_screen.dart';
 import 'package:shadow_pay_app/home/home_screen.dart';
 
-
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
 
@@ -146,10 +145,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
-                        color: Color(0xFF00BBA7).withOpacity(0.6),
+                        color: Color(0xFF00BBA7).withOpacity(0.6), 
                         spreadRadius: 2,
                         blurRadius: 10,
-                        offset: const Offset(0, 5),
+                        offset: const Offset(0, 5), 
                       ),
                     ],
                   ),
@@ -160,25 +159,29 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           duration: const Duration(milliseconds: 400),
                           curve: Curves.easeInOut,
                         );
-                      } else {
-                        final prefs = await SharedPreferences.getInstance();
-                        await prefs.setBool('seenOnboard', true);
+                      } 
+                      else {
+                            final prefs = await SharedPreferences.getInstance();
+                            await prefs.setBool('seenOnboard', true);
 
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => HomeScreen(),
-                          ),
-                        );
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => HomeScreen(),
+                              ),
+                            );
+
                       }
+
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF00BBA7),
+                      backgroundColor: const Color(0xFF00BBA7), 
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),
                       ),
                       elevation: 0,
+
                     ),
                     child: Text(
                       currentPage == 2 ? 'Get Started' : 'Next',
@@ -197,4 +200,4 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       ),
     );
   }
-}
+

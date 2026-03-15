@@ -36,3 +36,4 @@ class AppColors {
   static const Color green = Color(0xFF34A853);
   static const Color progressBg = Color(0xFF2A2F3F);
 }
+

@@ -124,13 +124,35 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Home'**
   String get home;
+  /// No description provided for @full_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Full Name'**
+  String get full_name;
+
+  /// No description provided for @confirm_password.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Password'**
+  String get confirm_password;
+
+  /// No description provided for @next.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get next;
+
+  /// No description provided for @step.
+  ///
+  /// In en, this message translates to:
+  /// **'Step 1 of 2'**
+  String get step;
 
   /// No description provided for @freeze_card.
   ///
   /// In en, this message translates to:
   /// **'Freeze Card'**
   String get freeze_card;
-
   /// No description provided for @loginTitle.
   ///
   /// In en, this message translates to:
@@ -232,6 +254,179 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Login Successfully'**
   String get loginSuccess;
+  /// No description provided for @requiredField.
+  ///
+  /// In en, this message translates to:
+  /// **'This field is required'**
+  String get requiredField;
+
+  /// No description provided for @invalidEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid email'**
+  String get invalidEmail;
+
+  /// No description provided for @passwordShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least 8 characters'**
+  String get passwordShort;
+
+  /// No description provided for @passwordMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords do not match'**
+  String get passwordMismatch;
+
+  /// No description provided for @invalidPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid phone number'**
+  String get invalidPhone;
+
+  /// No description provided for @invalidCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid card number'**
+  String get invalidCard;
+
+  /// No description provided for @invalidExpiry.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid expiry format'**
+  String get invalidExpiry;
+
+  /// No description provided for @nameShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Name must be at least 3 characters'**
+  String get nameShort;
+
+  /// No description provided for @fullName.
+  ///
+  /// In en, this message translates to:
+  /// **'Full name'**
+  String get fullName;
+
+  /// No description provided for @confirmPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm password'**
+  String get confirmPassword;
+
+  /// No description provided for @phone.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number linked whith your card'**
+  String get phone;
+
+  /// No description provided for @cardHolder.
+  ///
+  /// In en, this message translates to:
+  /// **'Card holder name'**
+  String get cardHolder;
+
+  /// No description provided for @cardNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Card number'**
+  String get cardNumber;
+
+  /// No description provided for @back.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get back;
+
+  /// No description provided for @finish.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish'**
+  String get finish;
+
+  /// No description provided for @invalidMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid month'**
+  String get invalidMonth;
+
+  /// No description provided for @accountCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Account created successfully'**
+  String get accountCreated;
+
+  /// No description provided for @stepTwo.
+  ///
+  /// In en, this message translates to:
+  /// **'Step 2 of 2'**
+  String get stepTwo;
+
+  /// No description provided for @paymentInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment Information'**
+  String get paymentInfo;
+
+  /// No description provided for @enterFirstAndLastName.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter first and last name separated by a space'**
+  String get enterFirstAndLastName;
+
+  /// No description provided for @eachNamePartMustBeAtLeast3Chars.
+  ///
+  /// In en, this message translates to:
+  /// **'Each part of the name must be at least 3 characters'**
+  String get eachNamePartMustBeAtLeast3Chars;
+
+  /// No description provided for @pleaseEnterExactlyTwoNames.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter exactly two names (first name and last name)'**
+  String get pleaseEnterExactlyTwoNames;
+
+  /// No description provided for @backToLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Login'**
+  String get backToLogin;
+
+  /// No description provided for @alreadyHaveAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account?'**
+  String get alreadyHaveAccount;
+
+  /// No description provided for @cardExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'your card has been expired'**
+  String get cardExpired;
+
+  /// No description provided for @cardNameTooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Card holder name must be at least 3 characters'**
+  String get cardNameTooShort;
+
+  /// No description provided for @cardNameInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Card holder name must contain only letters'**
+  String get cardNameInvalid;
+
+  /// No description provided for @phoneDigitsOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number must contain only digits'**
+  String get phoneDigitsOnly;
+
+  /// No description provided for @phoneInvalidLength.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid phone number (incorrect length)'**
+  String get phoneInvalidLength;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

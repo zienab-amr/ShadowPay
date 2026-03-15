@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:shadow_pay_app/l10n/app_localizations.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -8,7 +9,7 @@ class RegisterScreen extends StatefulWidget {
   State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _RegisterScreenState extends State<RegisterScreen> with SingleTickerProviderStateMixin {
   final formKey = GlobalKey<FormState>();
 
   // بيانات الصفحتين
@@ -27,8 +28,49 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   int currentStep = 1; // 1 أو 2
 
+  // متغيرات لتتبع حالة الأخطاء في كل حقل
+  final Map<String, bool> fieldErrors = {
+    'fullName': false,
+    'email': false,
+    'password': false,
+    'confirm': false,
+    'phone': false,
+    'cardName': false,
+    'cardNumber': false,
+    'expiry': false,
+  };
+
+  late AnimationController _animationController;
+  late Animation<double> _fadeAnimation;
+  late Animation<Offset> _slideAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
+    
+    _fadeAnimation = CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    );
+    
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(0.1, 0),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeOutCubic,
+    ));
+    
+    _animationController.forward();
+  }
+
   @override
   void dispose() {
+    _animationController.dispose();
     fullNameController.dispose();
     emailController.dispose();
     passwordController.dispose();
@@ -40,55 +82,277 @@ class _RegisterScreenState extends State<RegisterScreen> {
     super.dispose();
   }
 
-  // دوال التحقق
+  // في بداية الكود مع المتغيرات
+  final List<String> stepOneFields = ['fullName', 'email', 'password', 'confirm'];
+  final List<String> stepTwoFields = ['phone', 'cardName', 'cardNumber', 'expiry'];
+
+  void _changeStep(int newStep) {
+    if (newStep == currentStep) return;
+    
+    setState(() {
+      // تحديد الحقول اللي هنخفيها حسب الخطوة الحالية
+      final fieldsToHide = currentStep == 1 ? stepOneFields : stepTwoFields;
+      
+      // إخفاء أخطاء الحقول دي
+      for (var field in fieldsToHide) {
+        fieldErrors[field] = false;
+      }
+      
+      // تغيير الخطوة
+      currentStep = newStep;
+    });
+    
+    // تشغيل الأنيميشن
+    _animationController
+      ..reset()
+      ..forward();
+  }
+
+  // دوال التحقق - مع إضافة شرط التحقق من الصفحة الحالية
   String? _validateFullName(String? value) {
-    if (value == null || value.isEmpty) return "هذا الحقل مطلوب";
-    if (value.length < 3) return "الاسم يجب أن يكون 3 أحرف على الأقل";
+    // لو مش في الصفحة الأولى، ميعملش validation
+    if (currentStep != 1) return null;
+    
+    final loc = AppLocalizations.of(context)!;
+    
+    if (value == null || value.isEmpty) {
+     fieldErrors['fullName'] = true;
+      return loc.requiredField;
+    }
+    
+    // تقسيم النص باستخدام المسافة
+    List<String> nameParts = value.trim().split(' ');
+    
+    // إزالة العناصر الفارغة (في حالة وجود مسافات متعددة)
+    nameParts = nameParts.where((part) => part.isNotEmpty).toList();
+    
+    // التحقق من وجود جزأين على الأقل
+    if (nameParts.length < 2) {
+      fieldErrors['fullName'] = true;
+      return loc.enterFirstAndLastName;
+    }
+    
+    // التحقق من طول كل جزء
+    for (String part in nameParts) {
+      if (part.length < 3) {
+       fieldErrors['fullName'] = true;
+        return loc.eachNamePartMustBeAtLeast3Chars;
+      }
+    }
+    
+     fieldErrors['fullName'] = false;
     return null;
   }
 
   String? _validateEmail(String? value) {
-    if (value == null || value.isEmpty) return "هذا الحقل مطلوب";
-    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-      return "البريد الإلكتروني غير صالح";
+    // لو مش في الصفحة الأولى، ميعملش validation
+    if (currentStep != 1) return null;
+    
+    final loc = AppLocalizations.of(context)!;
+    
+    if (value == null || value.isEmpty) {
+      fieldErrors['email'] = true;
+      return loc.requiredField;
     }
+    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+      fieldErrors['email'] = true;
+      return loc.invalidEmail;
+    }
+    
+   fieldErrors['email'] = false;
     return null;
   }
 
   String? _validatePassword(String? value) {
-    if (value == null || value.isEmpty) return "هذا الحقل مطلوب";
-    if (value.length < 8) return "كلمة المرور يجب أن تكون 8 أحرف على الأقل";
+    // لو مش في الصفحة الأولى، ميعملش validation
+    if (currentStep != 1) return null;
+    
+    final loc = AppLocalizations.of(context)!;
+    
+    if (value == null || value.isEmpty) {
+     fieldErrors['password'] = true;
+      return loc.requiredField;
+    }
+    if (value.length < 😎 {
+       fieldErrors['password'] = true;
+      return loc.passwordShort;
+    }
+    
+   fieldErrors['password'] = false;
     return null;
   }
 
   String? _validateConfirm(String? value) {
-    if (value == null || value.isEmpty) return "هذا الحقل مطلوب";
-    if (value != passwordController.text) return "كلمة المرور غير متطابقة";
-    return null;
-  }
-
-  String? _validatePhone(String? value) {
-    if (value == null || value.isEmpty) return "هذا الحقل مطلوب";
-    if (!RegExp(r'^\+?\d{10,15}$').hasMatch(value)) {
-      return "رقم الهاتف غير صالح";
+    // لو مش في الصفحة الأولى، ميعملش validation
+    if (currentStep != 1) return null;
+    
+    final loc = AppLocalizations.of(context)!;
+    
+    if (value == null || value.isEmpty) {
+       fieldErrors['confirm'] = true;
+      return loc.requiredField;
     }
+    if (value != passwordController.text) {
+      fieldErrors['confirm'] = true;
+      return loc.passwordMismatch;
+    }
+    
+     fieldErrors['confirm'] = false;
     return null;
   }
 
+ String? _validatePhone(String? value) {
+  // لو مش في الصفحة الثانية، ميعملش validation
+  if (currentStep != 2) return null;
+  
+  final loc = AppLocalizations.of(context)!;
+  
+  if (value == null || value.trim().isEmpty) {
+    setState(() => fieldErrors['phone'] = true);
+    return loc.requiredField;
+  }
+
+  // تنظيف الرقم
+  String cleanNumber = value.trim().replaceAll(RegExp(r'[\s\-\(\)\+]'), '');
+  
+  // التحقق من أن الرقم يحتوي على أرقام فقط بعد التنظيف
+  if (!RegExp(r'^\d+$').hasMatch(cleanNumber)) {
+    setState(() => fieldErrors['phone'] = true);
+    return loc.phoneDigitsOnly;
+  }
+
+  // التحقق من طول الرقم (يدعم الأرقام المصرية والعالمية)
+  if (cleanNumber.length < 9 || cleanNumber.length > 15) {
+    setState(() => fieldErrors['phone'] = true);
+    return loc.phoneInvalidLength;
+  }
+
+  // صيغ محددة للأرقام المصرية
+  bool isValidEgyptianNumber = false;
+  
+  // لو الرقم مصري (بيبدأ بـ 01 أو 00201 أو +201)
+  if (cleanNumber.startsWith('01') && cleanNumber.length == 11) {
+    String secondDigit = cleanNumber[1];
+    if (['0', '1', '2', '5'].contains(secondDigit)) {
+      isValidEgyptianNumber = true;
+    }
+  }
+  // لو الرقم مصري بمفتاح دولي
+  else if (cleanNumber.startsWith('201') && cleanNumber.length == 12) {
+    String thirdDigit = cleanNumber[2];
+    if (['0', '1', '2', '5'].contains(thirdDigit)) {
+      isValidEgyptianNumber = true;
+    }
+  }
+  // لو الرقم مصري بكود 0020
+  else if (cleanNumber.startsWith('00201') && cleanNumber.length == 14) {
+    String fifthDigit = cleanNumber[4];
+    if (['0', '1', '2', '5'].contains(fifthDigit)) {
+      isValidEgyptianNumber = true;
+    }
+  }
+  // أرقام عالمية (أي رقم طوله مناسب)
+  else if (cleanNumber.length >= 10 && cleanNumber.length <= 15) {
+    isValidEgyptianNumber = true;
+  }
+
+  if (!isValidEgyptianNumber) {
+    setState(() => fieldErrors['phone'] = true);
+    return loc.invalidPhone;
+  }
+
+  setState(() => fieldErrors['phone'] = false);
+  return null;
+}
+  String? _validateCardName(String? value) {
+    // لو مش في الصفحة الثانية، ميعملش validation
+    if (currentStep != 2) return null;
+    
+    final loc = AppLocalizations.of(context)!;
+    
+    if (value == null || value.isEmpty) {
+      fieldErrors['cardName'] = true;
+      return loc.requiredField;
+    }
+    
+    // تقسيم النص باستخدام المسافة
+    List<String> nameParts = value.trim().split(' ');
+    
+    // إزالة العناصر الفارغة (في حالة وجود مسافات متعددة)
+    nameParts = nameParts.where((part) => part.isNotEmpty).toList();
+    
+    // التحقق من وجود جزأين على الأقل
+    if (nameParts.length < 2) {
+    fieldErrors['cardName'] = true;
+      return loc.enterFirstAndLastName;
+    }
+    
+    // التحقق من طول كل جزء
+    for (String part in nameParts) {
+      if (part.length < 3) {
+       fieldErrors['cardName'] = true;
+        return loc.eachNamePartMustBeAtLeast3Chars;
+      }
+    }
+    
+     fieldErrors['cardName'] = false;
+    return null;
+  }
+  
   String? _validateCardNumber(String? value) {
-    if (value == null || value.isEmpty) return "هذا الحقل مطلوب";
+    // لو مش في الصفحة الثانية، ميعملش validation
+    if (currentStep != 2) return null;
+    
+    final loc = AppLocalizations.of(context)!;
+    
+    if (value == null || value.isEmpty) {
+     fieldErrors['cardNumber'] = true;
+      return loc.requiredField;
+    }
     final cleanNumber = value.replaceAll(' ', '');
     if (!RegExp(r'^\d{16}$').hasMatch(cleanNumber)) {
-      return "رقم البطاقة غير صالح (16 رقم)";
+     fieldErrors['cardNumber'] = true;
+      return loc.invalidCard;
     }
+    
+    fieldErrors['cardNumber'] = false;
     return null;
   }
 
   String? _validateExpiry(String? value) {
-    if (value == null || value.isEmpty) return "هذا الحقل مطلوب";
-    if (!RegExp(r'^\d{2}/\d{2}$').hasMatch(value)) {
-      return "الصيغة غير صالحة (MM/YY)";
+    // لو مش في الصفحة الثانية، ميعملش validation
+    if (currentStep != 2) return null;
+    
+    final loc = AppLocalizations.of(context)!;
+    
+    if (value == null || value.isEmpty) {
+     fieldErrors['expiry'] = true;
+      return loc.requiredField;
     }
+    if (!RegExp(r'^\d{2}/\d{2}$').hasMatch(value)) {
+     fieldErrors['expiry'] = true;
+      return loc.invalidExpiry;
+    }
+    
+    final parts = value.split('/');
+    final month = int.tryParse(parts[0]) ?? 0;
+    final year = int.tryParse(parts[1]) ?? 0;
+    
+    final now = DateTime.now();
+    final currentYear = now.year % 100;
+    final currentMonth = now.month;
+
+    if (month < 1 || month > 12) {
+     fieldErrors['expiry'] = true;
+      return loc.invalidMonth;
+    }
+    
+    if (year < currentYear || (year == currentYear && month < currentMonth)) {
+     fieldErrors['expiry'] = true;
+      return loc.cardExpired;
+    }
+    
+   fieldErrors['expiry'] = false;
     return null;
   }
 
@@ -104,22 +368,40 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   void nextStep() {
-    if (formKey.currentState!.validate()) {
-      if (currentStep == 1) {
-        setState(() => currentStep = 2);
-      } else {
-        submit();
+  final isValid = formKey.currentState!.validate();
+  
+  setState(() {}); // تحديث الواجهة بعد ما validators تخلص
+  
+  if (isValid) {
+    if (currentStep == 1) {
+      _changeStep(2);
+    } else {
+      submit();
+    }
+  }
+ 
+}
+void prevStep() {
+  if (currentStep == 2) {
+
+    formKey.currentState?.reset(); // يمسح errors فقط
+
+    setState(() {
+      for (var field in stepTwoFields) {
+        fieldErrors[field] = false;
       }
-    }
-  }
 
-  void prevStep() {
-    if (currentStep == 2) {
-      setState(() => currentStep = 1);
-    }
-  }
+      currentStep = 1;
+    });
 
+    _animationController
+      ..reset()
+      ..forward();
+  }
+}
   void submit() async {
+    final loc = AppLocalizations.of(context)!;
+    
     setState(() => loading = true);
     
     // محاكاة طلب API
@@ -130,7 +412,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text("تم إنشاء الحساب بنجاح"),
+          content: Text(loc.accountCreated),
           backgroundColor: Colors.teal,
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
@@ -141,20 +423,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
       
       // طباعة البيانات للتأكد
       print('===== بيانات التسجيل =====');
-      print('الاسم: ${fullNameController.text}');
-      print('البريد: ${emailController.text}');
-      print('الهاتف: ${phoneController.text}');
-      print('البطاقة: ${cardNumberController.text}');
+      print('${loc.fullName}: ${fullNameController.text}');
+      print('${loc.email}: ${emailController.text}');
+      print('${loc.phone}: ${phoneController.text}');
+      print('${loc.cardNumber}: ${cardNumberController.text}');
       print('=========================');
     }
   }
 
+  void navigateToLogin() {
+    Navigator.pushReplacementNamed(context, '/login');
+  }
+
+  // دالة لتحديد لون النص والايقونة
+  Color _getLabelColor(String fieldName) {
+    return fieldErrors[fieldName] == true ? Colors.red : Colors.white70;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
             colors: [Color(0xff0a1628), Color(0xff0f1f3a), Color(0xff0a1628)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -166,215 +459,510 @@ class _RegisterScreenState extends State<RegisterScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const LogoWidget(),
-                const SizedBox(height: 30),
-                StepProgress(currentStep: currentStep),
-                const SizedBox(height: 10),
-                Text(
-                  "الخطوة $currentStep من 2",
-                  style: const TextStyle(color: Colors.white70, fontSize: 16),
+                // Logo with enhanced shadow (في مكانه الأصلي)
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.teal.withOpacity(0.3),
+                        blurRadius: 25,
+                        spreadRadius: 2,
+                        offset: const Offset(0, 10),
+                      ),
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 15,
+                        spreadRadius: 1,
+                        offset: const Offset(0, 5),
+                      ),
+                    ],
+                  ),
+                  child: const LogoWidget(),
                 ),
                 const SizedBox(height: 30),
-
-                // معاينة البطاقة في الخطوة 2
-                if (currentStep == 2) ...[
-                  CreditCardPreview(
-                    cardNameController: cardNameController,
-                    cardNumberController: cardNumberController,
-                    expiryController: expiryController,
+                
+                // Step Progress with animation
+                TweenAnimationBuilder<double>(
+                  tween: Tween(begin: 0.0, end: 1.0),
+                  duration: const Duration(milliseconds: 400),
+                  curve: Curves.easeOutBack,
+                  builder: (context, value, child) {
+                    return Transform.scale(
+                      scale: value,
+                      child: child,
+                    );
+                  },
+                  child: StepProgress(currentStep: currentStep),
+                ),
+                
+                const SizedBox(height: 10),
+                
+                // Step text with fade animation
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 300),
+                  transitionBuilder: (Widget child, Animation<double> animation) {
+                    return FadeTransition(
+                      opacity: animation,
+                      child: SlideTransition(
+                        position: Tween<Offset>(
+                          begin: const Offset(0, 0.2),
+                          end: Offset.zero,
+                        ).animate(CurvedAnimation(
+                          parent: animation,
+                          curve: Curves.easeOut,
+                        )),
+                        child: child,
+                      ),
+                    );
+                  },
+                  child: Text(
+                    currentStep == 1 ? loc.step : loc.stepTwo,
+                    key: ValueKey<int>(currentStep),
+                    style: const TextStyle(color: Colors.white70, fontSize: 16),
                   ),
-                  const SizedBox(height: 30),
-                ],
+                ),
+                
+                const SizedBox(height: 30),
 
-                GlassCard(
-                  child: Form(
-                    key: formKey,
-                    child: Column(
-                      children: [
-                        // عنوان حسب الخطوة
-                        Text(
-                          currentStep == 1 ? "إنشاء حساب جديد" : "معلومات الدفع",
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 26,
-                            fontWeight: FontWeight.bold,
+                // Credit Card Preview with animation and enhanced shadow
+                if (currentStep == 2)
+                  AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 500),
+                    transitionBuilder: (Widget child, Animation<double> animation) {
+                      return FadeTransition(
+                        opacity: animation,
+                        child: ScaleTransition(
+                          scale: Tween<double>(begin: 0.8, end: 1.0).animate(
+                            CurvedAnimation(
+                              parent: animation,
+                              curve: Curves.easeOutBack,
+                            ),
                           ),
+                          child: child,
                         ),
-                        const SizedBox(height: 20),
-
-                        // حقول الخطوة الأولى
-                        if (currentStep == 1) ...[
-                          buildField(
-                            controller: fullNameController,
-                            hint: "الاسم الكامل",
-                            icon: Icons.person,
-                            validator: _validateFullName,
+                      );
+                    },
+                    child: Container(
+                      key: const ValueKey<int>(2),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(25),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.teal.withOpacity(0.4),
+                            blurRadius: 30,
+                            spreadRadius: 5,
+                            offset: const Offset(0, 15),
                           ),
-                          const SizedBox(height: 15),
-                          buildField(
-                            controller: emailController,
-                            hint: "البريد الإلكتروني",
-                            icon: Icons.email,
-                            validator: _validateEmail,
-                            keyboardType: TextInputType.emailAddress,
-                          ),
-                          const SizedBox(height: 15),
-                          buildField(
-                            controller: passwordController,
-                            hint: "كلمة المرور",
-                            icon: Icons.lock,
-                            obscure: !showPassword,
-                            validator: _validatePassword,
-                            suffix: IconButton(
-                              icon: Icon(
-                                showPassword
-                                    ? Icons.visibility_off
-                                    : Icons.visibility,
-                                color: Colors.white70,
-                              ),
-                              onPressed: () => setState(() => showPassword = !showPassword),
-                            ),
-                          ),
-                          const SizedBox(height: 15),
-                          buildField(
-                            controller: confirmController,
-                            hint: "تأكيد كلمة المرور",
-                            icon: Icons.lock,
-                            obscure: !showConfirm,
-                            validator: _validateConfirm,
-                            suffix: IconButton(
-                              icon: Icon(
-                                showConfirm
-                                    ? Icons.visibility_off
-                                    : Icons.visibility,
-                                color: Colors.white70,
-                              ),
-                              onPressed: () => setState(() => showConfirm = !showConfirm),
-                            ),
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.3),
+                            blurRadius: 20,
+                            spreadRadius: 2,
+                            offset: const Offset(0, 😎,
                           ),
                         ],
+                      ),
+                      child: CreditCardPreview(
+                        cardNameController: cardNameController,
+                        cardNumberController: cardNumberController,
+                        expiryController: expiryController,
+                        loc: loc,
+                        hasError: fieldErrors['cardNumber'] == true || 
+                                 fieldErrors['expiry'] == true || 
+                                 fieldErrors['cardName'] == true,
+                      ),
+                    ),
+                  ),
 
-                        // حقول الخطوة الثانية
-                        if (currentStep == 2) ...[
-                          buildField(
-                            controller: phoneController,
-                            hint: "رقم الهاتف",
-                            icon: Icons.phone,
-                            validator: _validatePhone,
-                            keyboardType: TextInputType.phone,
-                          ),
-                          const SizedBox(height: 15),
-                          buildField(
-                            controller: cardNameController,
-                            hint: "اسم حامل البطاقة",
-                            icon: Icons.person,
-                            onChanged: (_) => setState(() {}),
-                          ),
-                          const SizedBox(height: 15),
-                          buildField(
-                            controller: cardNumberController,
-                            hint: "رقم البطاقة",
-                            icon: Icons.credit_card,
-                            validator: _validateCardNumber,
-                            onChanged: (value) {
-                              final formatted = formatCardNumber(value);
-                              cardNumberController.value = TextEditingValue(
-                                text: formatted,
-                                selection: TextSelection.collapsed(
-                                  offset: formatted.length,
+                if (currentStep == 2) const SizedBox(height: 30),
+
+                // Glass Card with enhanced shadow
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(28),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.5),
+                        blurRadius: 30,
+                        spreadRadius: 5,
+                        offset: const Offset(0, 15),
+                      ),
+                      BoxShadow(
+                        color: Colors.teal.withOpacity(0.1),
+                        blurRadius: 20,
+                        spreadRadius: 2,
+                        offset: const Offset(0, 5),
+                      ),
+                    ],
+                  ),
+                  child: GlassCard(
+                    child: Form(
+                      key: formKey,
+                      child: Column(
+                        children: [
+                          // عنوان حسب الخطوة مع animation
+                          AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 300),
+                            transitionBuilder: (Widget child, Animation<double> animation) {
+                              return FadeTransition(
+                                opacity: animation,
+                                child: SlideTransition(
+                                  position: Tween<Offset>(
+                                    begin: const Offset(0, 0.1),
+                                    end: Offset.zero,
+                                  ).animate(CurvedAnimation(
+                                    parent: animation,
+                                    curve: Curves.easeOut,
+                                  )),
+                                  child: child,
                                 ),
                               );
-                              setState(() {});
                             },
-                            keyboardType: TextInputType.number,
-                            maxLength: 19,
-                          ),
-                          const SizedBox(height: 15),
-                          buildField(
-                            controller: expiryController,
-                            hint: "MM/YY",
-                            icon: Icons.calendar_month,
-                            validator: _validateExpiry,
-                            onChanged: (_) => setState(() {}),
-                            keyboardType: TextInputType.datetime,
-                          ),
-                        ],
-
-                        const SizedBox(height: 25),
-
-                        // الأزرار حسب الخطوة
-                        if (currentStep == 1)
-                          SizedBox(
-                            width: double.infinity,
-                            height: 55,
-                            child: ElevatedButton(
-                              onPressed: nextStep,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.teal,
-                                foregroundColor: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                elevation: 5,
+                            child: Text(
+                              currentStep == 1 ? loc.register : loc.paymentInfo,
+                              key: ValueKey<String>(currentStep == 1 ? 'register' : 'payment'),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 26,
+                                fontWeight: FontWeight.bold,
                               ),
-                              child: const Text(
-                                "التالي",
-                                style: TextStyle(fontSize: 18),
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+
+                          // حقول مع SlideTransition
+                          FadeTransition(
+                            opacity: _fadeAnimation,
+                            child: SlideTransition(
+                              position: _slideAnimation,
+                              child: Column(
+                                children: [
+                                  if (currentStep == 1) ...[
+                                    // حقل الاسم الكامل
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: fieldErrors['fullName'] == true ? Colors.red.withOpacity(0.1) : Colors.transparent,
+                                        borderRadius: BorderRadius.circular(16),
+                                      ),
+                                      child: buildField(
+                                        controller: fullNameController,
+                                        hint: loc.fullName,
+                                        icon: Icons.person,
+                                        validator: _validateFullName,
+                                        labelColor: _getLabelColor('fullName'),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 15),
+                                    
+                                    // حقل البريد الإلكتروني
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: fieldErrors['email'] == true ? Colors.red.withOpacity(0.1) : Colors.transparent,
+                                        borderRadius: BorderRadius.circular(16),
+                                      ),
+                                      child: buildField(
+                                        controller: emailController,
+                                        hint: loc.email,
+                                        icon: Icons.email,
+                                        validator: _validateEmail,
+                                        keyboardType: TextInputType.emailAddress,
+                                        labelColor: _getLabelColor('email'),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 15),
+                                    
+                                    // حقل كلمة المرور
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: fieldErrors['password'] == true ? Colors.red.withOpacity(0.1) : Colors.transparent,
+                                        borderRadius: BorderRadius.circular(16),
+                                      ),
+                                      child: buildField(
+                                        controller: passwordController,
+                                        hint: loc.password,
+                                        icon: Icons.lock,
+                                        obscure: !showPassword,
+                                        validator: _validatePassword,
+                                        labelColor: _getLabelColor('password'),
+                                        suffix: IconButton(
+                                          icon: Icon(
+                                            showPassword
+                                                ? Icons.visibility_off
+                                                : Icons.visibility,
+                                            color: fieldErrors['password'] == true 
+                                                ? Colors.red 
+                                                : Colors.white70,
+                                          ),
+                                          onPressed: () => setState(() => showPassword = !showPassword),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 15),
+                                    
+                                    // حقل تأكيد كلمة المرور
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: fieldErrors['confirm'] == true ? Colors.red.withOpacity(0.1) : Colors.transparent,
+                                        borderRadius: BorderRadius.circular(16),
+                                      ),
+                                      child: buildField(
+                                        controller: confirmController,
+                                        hint: loc.confirmPassword,
+                                        icon: Icons.lock,
+                                        obscure: !showConfirm,
+                                        validator: _validateConfirm,
+                                        labelColor: _getLabelColor('confirm'),
+                                        suffix: IconButton(
+                                          icon: Icon(
+                                            showConfirm
+                                                ? Icons.visibility_off
+                                                : Icons.visibility,
+                                            color: fieldErrors['confirm'] == true 
+                                                ? Colors.red 
+                                                : Colors.white70,
+                                          ),
+                                          onPressed: () => setState(() => showConfirm = !showConfirm),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+
+                                  if (currentStep == 2) ...[
+                                    // حقل الهاتف
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: fieldErrors['phone'] == true ? Colors.red.withOpacity(0.1) : Colors.transparent,
+                                        borderRadius: BorderRadius.circular(16),
+                                      ),
+                                      child: buildField(
+                                        controller: phoneController,
+                                        hint: loc.phone,
+                                        icon: Icons.phone,
+                                        validator: _validatePhone,
+                                        keyboardType: TextInputType.phone,
+                                        labelColor: _getLabelColor('phone'),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 15),
+                                    
+                                    // حقل اسم حامل البطاقة
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: fieldErrors['cardName'] == true ? Colors.red.withOpacity(0.1) : Colors.transparent,
+                                        borderRadius: BorderRadius.circular(16),
+                                      ),
+                                      child: buildField(
+                                        controller: cardNameController,
+                                        hint: loc.cardHolder,
+                                        icon: Icons.person,
+                                        validator: _validateCardName,
+                                        onChanged: (_) => setState(() {}),
+                                        labelColor: _getLabelColor('cardName'),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 15),
+                                    
+                                    // حقل رقم البطاقة
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: fieldErrors['cardNumber'] == true ? Colors.red.withOpacity(0.1) : Colors.transparent,
+                                        borderRadius: BorderRadius.circular(16),
+                                      ),
+                                      child: buildField(
+                                        controller: cardNumberController,
+                                        hint: loc.cardNumber,
+                                        icon: Icons.credit_card,
+                                        validator: _validateCardNumber,
+                                        onChanged: (value) {
+                                          final formatted = formatCardNumber(value);
+                                          cardNumberController.value = TextEditingValue(
+                                            text: formatted,
+                                            selection: TextSelection.collapsed(
+                                              offset: formatted.length,
+                                            ),
+                                          );
+                                          setState(() {});
+                                        },
+                                        keyboardType: TextInputType.number,
+                                        maxLength: 19,
+                                        labelColor: _getLabelColor('cardNumber'),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 15),
+                                    
+                                    // حقل تاريخ الانتهاء
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: fieldErrors['expiry'] == true ? Colors.red.withOpacity(0.1) : Colors.transparent,
+                                        borderRadius: BorderRadius.circular(16),
+                                      ),
+                                      child: buildField(
+                                        controller: expiryController,
+                                        hint: "MM/YY",
+                                        icon: Icons.calendar_month,
+                                        validator: _validateExpiry,
+                                        onChanged: (_) => setState(() {}),
+                                        keyboardType: TextInputType.datetime,
+                                        labelColor: _getLabelColor('expiry'),
+                                      ),
+                                    ),
+                                  ],
+                                ],
                               ),
                             ),
                           ),
 
-                        if (currentStep == 2)
-                          Row(
-                            children: [
-                              Expanded(
-                                child: ElevatedButton(
-                                  onPressed: prevStep,
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.grey[800],
-                                    foregroundColor: Colors.white,
-                                    minimumSize: const Size(double.infinity, 55),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(16),
+                          const SizedBox(height: 25),
+
+                          // الأزرار حسب الخطوة مع animation
+                          AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 400),
+                            transitionBuilder: (Widget child, Animation<double> animation) {
+                              return FadeTransition(
+                                opacity: animation,
+                                child: ScaleTransition(
+                                  scale: Tween<double>(begin: 0.9, end: 1.0).animate(
+                                    CurvedAnimation(
+                                      parent: animation,
+                                      curve: Curves.easeOut,
                                     ),
                                   ),
-                                  child: const Text(
-                                    "رجوع",
-                                    style: TextStyle(fontSize: 16),
+                                  child: child,
+                                ),
+                              );
+                            },
+                            child: currentStep == 1
+                                ? SizedBox(
+                                    key: const ValueKey<String>('next_button'),
+                                    width: double.infinity,
+                                    height: 55,
+                                    child: ElevatedButton(
+                                      onPressed: nextStep,
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.teal,
+                                        foregroundColor: Colors.white,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(16),
+                                        ),
+                                        elevation: 8,
+                                        shadowColor: Colors.teal.withOpacity(0.5),
+                                      ),
+                                      child: Text(
+                                        loc.next,
+                                        style: const TextStyle(fontSize: 18),
+                                      ),
+                                    ),
+                                  )
+                                : Row(
+                                    key: const ValueKey<String>('finish_buttons'),
+                                    children: [
+                                      Expanded(
+                                        child: ElevatedButton(
+                                          onPressed: prevStep,
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.grey[800],
+                                            foregroundColor: Colors.white,
+                                            minimumSize: const Size(double.infinity, 55),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(16),
+                                            ),
+                                            elevation: 5,
+                                            shadowColor: Colors.black.withOpacity(0.5),
+                                          ),
+                                          child: Text(
+                                            loc.back,
+                                            style: const TextStyle(fontSize: 16),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 10),
+                                      Expanded(
+                                        child: ElevatedButton(
+                                          onPressed: loading ? null : nextStep,
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.teal,
+                                            foregroundColor: Colors.white,
+                                            minimumSize: const Size(double.infinity, 55),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(16),
+                                            ),
+                                            elevation: 8,
+                                            shadowColor: Colors.teal.withOpacity(0.5),
+                                          ),
+                                          child: loading
+                                              ? const SizedBox(
+                                                  height: 20,
+                                                  width: 20,
+                                                  child: CircularProgressIndicator(
+                                                    color: Colors.white,
+                                                    strokeWidth: 2,
+                                                  ),
+                                                )
+                                              : Text(
+                                                  loc.finish,
+                                                  style: const TextStyle(fontSize: 16),
+                                                ),
+                                        ),
+                                      )
+                                    ],
                                   ),
+                          ),
+                          
+                          const SizedBox(height: 20),
+                          
+                          // Back to Login button (داخل الكونتينر)
+                          InkWell(
+                            onTap: navigateToLogin,
+                            borderRadius: BorderRadius.circular(30),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(30),
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Colors.white.withOpacity(0.1),
+                                    Colors.white.withOpacity(0.05),
+                                  ],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                ),
+                                border: Border.all(
+                                  color: Colors.white.withOpacity(0.2),
+                                  width: 1,
                                 ),
                               ),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                child: ElevatedButton(
-                                  onPressed: loading ? null : nextStep,
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.teal,
-                                    foregroundColor: Colors.white,
-                                    minimumSize: const Size(double.infinity, 55),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(16),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    loc.alreadyHaveAccount,
+                                    style: TextStyle(
+                                      color: Colors.white.withOpacity(0.7),
+                                      fontSize: 14,
                                     ),
-                                    elevation: 5,
                                   ),
-                                  child: loading
-                                      ? const SizedBox(
-                                          height: 20,
-                                          width: 20,
-                                          child: CircularProgressIndicator(
-                                            color: Colors.white,
-                                            strokeWidth: 2,
-                                          ),
-                                        )
-                                      : const Text(
-                                          "إنهاء التسجيل",
-                                          style: TextStyle(fontSize: 16),
-                                        ),
-                                ),
-                              )
-                            ],
-                          )
-                      ],
+                                  const SizedBox(width: 5),
+                                  Text(
+                                    loc.backToLogin,
+                                    style: const TextStyle(
+                                      color: Colors.teal,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 5),
+                                  const Icon(
+                                    Icons.arrow_forward,
+                                    color: Colors.teal,
+                                    size: 16,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -396,40 +984,54 @@ class _RegisterScreenState extends State<RegisterScreen> {
     Function(String)? onChanged,
     TextInputType? keyboardType,
     int? maxLength,
+    Color labelColor = Colors.white70,
   }) {
-    return TextFormField(
-      controller: controller,
-      obscureText: obscure,
-      validator: validator,
-      onChanged: onChanged,
-      keyboardType: keyboardType,
-      maxLength: maxLength,
-      style: const TextStyle(color: Colors.white, fontSize: 16),
-      decoration: InputDecoration(
-        hintText: hint,
-        hintStyle: const TextStyle(color: Colors.white54),
-        prefixIcon: Icon(icon, color: Colors.white70),
-        suffixIcon: suffix,
-        filled: true,
-        fillColor: Colors.black26,
-        counterText: "",
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide.none,
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2),
+            blurRadius: 8,
+            spreadRadius: 1,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: TextFormField(
+        controller: controller,
+        obscureText: obscure,
+        validator: validator,
+        onChanged: onChanged,
+        keyboardType: keyboardType,
+        maxLength: maxLength,
+        style: const TextStyle(color: Colors.white, fontSize: 16),
+        decoration: InputDecoration(
+          hintText: hint,
+          hintStyle: TextStyle(color: labelColor),
+          prefixIcon: Icon(icon, color: labelColor),
+          suffixIcon: suffix,
+          filled: true,
+          fillColor: Colors.black26,
+          counterText: "",
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: BorderSide.none,
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: BorderSide.none,
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: const BorderSide(color: Colors.teal, width: 1),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: const BorderSide(color: Colors.redAccent, width: 1),
+          ),
+          contentPadding: const EdgeInsets.symmetric(vertical: 16),
         ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide.none,
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: Colors.teal, width: 1),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: Colors.redAccent, width: 1),
-        ),
-        contentPadding: const EdgeInsets.symmetric(vertical: 16),
       ),
     );
   }
@@ -458,10 +1060,9 @@ class LogoWidget extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: Image.asset(
-          'assets/icon/icon.png', // غير المسار حسب مكان صورتك
+          'assets/icon/icon.png',
           fit: BoxFit.cover,
           errorBuilder: (context, error, stackTrace) {
-            // في حالة خطأ في تحميل الصورة
             return Container(
               color: Colors.white10,
               child: const Icon(
@@ -494,6 +1095,14 @@ class StepProgress extends StatelessWidget {
             decoration: BoxDecoration(
               color: i <= currentStep ? Colors.teal : Colors.white24,
               borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                if (i <= currentStep)
+                  BoxShadow(
+                    color: Colors.teal.withOpacity(0.5),
+                    blurRadius: 8,
+                    spreadRadius: 1,
+                  ),
+              ],
             ),
           ),
       ],
@@ -529,12 +1138,16 @@ class CreditCardPreview extends StatelessWidget {
   final TextEditingController cardNameController;
   final TextEditingController cardNumberController;
   final TextEditingController expiryController;
+  final AppLocalizations loc;
+  final bool hasError;
 
   const CreditCardPreview({
     super.key,
     required this.cardNameController,
     required this.cardNumberController,
     required this.expiryController,
+    required this.loc,
+    this.hasError = false,
   });
 
   String formatCardNumber(String text) {
@@ -556,13 +1169,20 @@ class CreditCardPreview extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(25),
-        gradient: const LinearGradient(
-          colors: [Color(0xff14b8a6), Color(0xff0ea5a4)],
-        ),
+        gradient: hasError
+            ? const LinearGradient(
+                colors: [Color(0xffdc2626), Color(0xffb91c1c)],
+              )
+            : const LinearGradient(
+                colors: [Color(0xff14b8a6), Color(0xff0ea5a4)],
+              ),
         boxShadow: [
           BoxShadow(
-            color: Colors.teal.withOpacity(0.3),
-            blurRadius: 15,
+            color: hasError 
+                ? Colors.red.withOpacity(0.4)
+                : Colors.teal.withOpacity(0.4),
+            blurRadius: 20,
+            spreadRadius: 2,
             offset: const Offset(0, 10),
           ),
         ],
@@ -581,6 +1201,9 @@ class CreditCardPreview extends StatelessWidget {
                   color: Colors.white24,
                   borderRadius: BorderRadius.circular(5),
                 ),
+                child: hasError
+                    ? const Icon(Icons.error, color: Colors.white, size: 20)
+                    : null,
               ),
             ],
           ),
