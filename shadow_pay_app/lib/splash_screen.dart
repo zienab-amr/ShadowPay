@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shadow_pay_app/Onboard/home_screen.dart';
+import 'package:shadow_pay_app/home/home_screen.dart';
 import 'package:shadow_pay_app/main.dart';
 import 'Onboard/onboarding_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';

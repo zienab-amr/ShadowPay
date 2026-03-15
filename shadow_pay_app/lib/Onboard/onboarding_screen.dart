@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'first_screen.dart';
 import 'second_screen.dart';
 import 'third_screen.dart';
-import 'home_screen.dart';
+import 'package:shadow_pay_app/home/home_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -20,93 +20,87 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF101622), 
+      backgroundColor: const Color(0xFF101622),
       body: SafeArea(
         child: Column(
           children: [
-            
             Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-            child: currentPage == 0
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Container(
-                            height: 32,
-                            width: 32,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF0d59f2),
-                              borderRadius: BorderRadius.circular(8),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              child: currentPage == 0
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              height: 32,
+                              width: 32,
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF0d59f2),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Image.asset(
+                                'assets/icon/icon.png',
+                              ),
                             ),
-                            child: Image.asset(
-                              'assets/icon/icon.png',
+                            const SizedBox(width: 8),
+                            const Text(
+                              'ShadowPay',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
+                          ],
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => HomeScreen(),
+                              ),
+                            );
+                          },
+                          child: const Text('Skip'),
+                        ),
+                      ],
+                    )
+                  : Row(
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            _controller.previousPage(
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.easeInOut,
+                            );
+                          },
+                          icon:
+                              const Icon(Icons.arrow_back, color: Colors.white),
+                        ),
+                        const Spacer(),
+                        const Text(
+                          'ShadowPay',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
                           ),
-                          const SizedBox(width: 8),
-                          const Text(
-                            'ShadowPay',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
+                        ),
+                        const Spacer(),
+                        TextButton(
+                          onPressed: () {
+                            _controller.jumpToPage(2);
+                          },
+                          style: TextButton.styleFrom(
+                            foregroundColor: Colors.grey,
                           ),
-                        ],
-                      ),
-
-            TextButton(
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HomeScreen(),
-                  ),
-                );
-              },
-              child: const Text('Skip'),
+                          child: const Text("Skip"),
+                        ),
+                      ],
+                    ),
             ),
-          ],
-        )
-      : Row(
-  children: [
-    IconButton(
-      onPressed: () {
-        _controller.previousPage(
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeInOut,
-        );
-      },
-      icon: const Icon(Icons.arrow_back, color: Colors.white),
-    ),
-
-        const Spacer(),
-
-        const Text(
-          'ShadowPay',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-
-        const Spacer(),
-
-        TextButton(
-          onPressed: () {
-            _controller.jumpToPage(2);
-          },
-          style: TextButton.styleFrom(
-            foregroundColor: Colors.grey,
-          ),
-          child: const Text("Skip"),
-        ),
-      ],
-    ),
-    ),
-
             Expanded(
               child: PageView(
                 controller: _controller,
@@ -122,7 +116,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 ],
               ),
             ),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(
@@ -141,9 +134,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 ),
               ),
             ),
-
             const SizedBox(height: 24),
-
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: SizedBox(
@@ -189,7 +180,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),
                       ),
-                      elevation: 0, 
+                      elevation: 0,
+
                     ),
                     child: Text(
                       currentPage == 2 ? 'Get Started' : 'Next',
@@ -202,11 +194,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 ),
               ),
             ),
-
             const SizedBox(height: 32),
           ],
         ),
       ),
     );
   }
-}
+

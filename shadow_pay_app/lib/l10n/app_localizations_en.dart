@@ -21,6 +21,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get password => 'Password';
 
   @override
+  String get home => 'Home';
   String get full_name => 'Full Name';
 
   @override
@@ -36,6 +37,56 @@ class AppLocalizationsEn extends AppLocalizations {
   String get freeze_card => 'Freeze Card';
 
   @override
+  String get loginTitle => 'Login';
+
+  @override
+  String get welcomeMessage => 'Hello,Welcome!';
+
+  @override
+  String get emailLabel => 'Email';
+
+  @override
+  String get passwordLabel => 'Password';
+
+  @override
+  String get forgotPassword => 'Forgot Password?';
+
+  @override
+  String get loginButton => 'Login';
+
+  @override
+  String get noAccount => 'Don\'t have an account?';
+
+  @override
+  String get signUp => 'Sign Up';
+
+  @override
+  String get emailRequired => 'Email is required';
+
+  @override
+  String get emailInvalid => 'Please enter a valid email';
+
+  @override
+  String get passwordRequired => 'Password is required';
+
+  @override
+  String get passwordTooShort => 'Password must be at least 6 characters';
+
+  @override
+  String get select_language => 'Select Language';
+
+  @override
+  String get arabic => 'Arabic';
+
+  @override
+  String get english => 'English';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get loginSuccess => 'Login Successfully';
+=======
   String get requiredField => 'This field is required';
 
   @override

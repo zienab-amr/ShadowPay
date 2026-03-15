@@ -30,6 +30,7 @@ class _RegisterPageOneState extends State<RegisterPageOne> {
     super.dispose();
   }
 
+
   void nextPage() {
     if (formKey.currentState!.validate()) {
       Navigator.push(
@@ -121,6 +122,7 @@ class _RegisterPageOneState extends State<RegisterPageOne> {
                           hint: loc.confirm_password,
                           icon: Icons.lock,
                           obscure: !showConfirm,
+
                           suffix: IconButton(
                             icon: Icon(
                               showConfirm

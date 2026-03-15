@@ -173,7 +173,7 @@ class _RegisterScreenState extends State<RegisterScreen> with SingleTickerProvid
      fieldErrors['password'] = true;
       return loc.requiredField;
     }
-    if (value.length < 8) {
+    if (value.length < 😎 {
        fieldErrors['password'] = true;
       return loc.passwordShort;
     }
@@ -558,7 +558,7 @@ void prevStep() {
                             color: Colors.black.withOpacity(0.3),
                             blurRadius: 20,
                             spreadRadius: 2,
-                            offset: const Offset(0, 8),
+                            offset: const Offset(0, 😎,
                           ),
                         ],
                       ),

@@ -12,6 +12,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get login => 'تسجيل الدخول';
 
   @override
+  String get register => 'إنشاء حساب';
   String get register => 'تسجيل';
 
   @override
@@ -21,6 +22,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get password => 'كلمة المرور';
 
   @override
+  String get home => 'الرئيسية';
   String get full_name => 'الاسم الكامل';
 
   @override
@@ -36,6 +38,55 @@ class AppLocalizationsAr extends AppLocalizations {
   String get freeze_card => 'تجميد البطاقة';
 
   @override
+  String get loginTitle => 'تسجيل الدخول';
+
+  @override
+  String get welcomeMessage => 'اهلا ,مرحبا بك';
+
+  @override
+  String get emailLabel => 'البريد الإلكتروني';
+
+  @override
+  String get passwordLabel => 'كلمة المرور';
+
+  @override
+  String get forgotPassword => 'نسيت كلمة المرور؟';
+
+  @override
+  String get loginButton => 'تسجيل الدخول';
+
+  @override
+  String get noAccount => 'ليس لديك حساب؟';
+
+  @override
+  String get signUp => 'إنشاء حساب';
+
+  @override
+  String get emailRequired => 'البريد الإلكتروني مطلوب';
+
+  @override
+  String get emailInvalid => 'الرجاء إدخال بريد إلكتروني صحيح';
+
+  @override
+  String get passwordRequired => 'كلمة المرور مطلوبة';
+
+  @override
+  String get passwordTooShort => 'كلمة المرور يجب أن تكون ٦ أحرف على الأقل';
+
+  @override
+  String get select_language => 'اختر اللغة';
+
+  @override
+  String get arabic => 'العربية';
+
+  @override
+  String get english => 'الإنجليزية';
+
+  @override
+  String get cancel => 'إلغاء';
+
+  @override
+  String get loginSuccess => 'تم تسجيل الدخول بنجاح';
   String get requiredField => 'هذا الحقل مطلوب';
 
   @override
