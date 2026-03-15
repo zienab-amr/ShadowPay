@@ -1,0 +1,26 @@
+{
+  "login": "Login",
+  "register": "Register",
+  "email": "Email",
+  "password": "Password",
+  "home": "Home",
+  "freeze_card": "Freeze Card",
+  "loginTitle": "Login",
+  "welcomeMessage": "Hello,Welcome!",
+  "emailLabel": "Email",
+  "passwordLabel": "Password",
+  "forgotPassword": "Forgot Password?",
+  "loginButton": "Login",
+  "noAccount": "Don't have an account?",
+  "signUp": "Sign Up",
+  "emailRequired": "Email is required",
+  "emailInvalid": "Please enter a valid email",
+  "passwordRequired": "Password is required",
+  "passwordTooShort": "Password must be at least 6 characters",
+  "select_language": "Select Language",
+  "arabic": "Arabic",
+  "english": "English",
+  "cancel": "Cancel",
+  "loginSuccess": "Login Successfully"
+
+}
