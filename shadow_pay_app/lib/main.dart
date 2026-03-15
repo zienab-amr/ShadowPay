@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shadow_pay_app/l10n/app_localizations.dart';
 import 'Register/register_screen.dart';
 import 'Onboard/onboarding_screen.dart';
+import 'ForgetPassword/forgot_password.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,10 +16,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+
        locale: Locale('en'),
       supportedLocales: [
-    Locale('en'),
-    Locale('ar'),
+       Locale('en'),
+       Locale('ar'),
   ],
   localizationsDelegates: [
      AppLocalizations.delegate, 

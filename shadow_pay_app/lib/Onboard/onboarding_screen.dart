@@ -1,8 +1,10 @@
+import 'package:shadow_pay_app/main.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'first_screen.dart';
 import 'second_screen.dart';
 import 'third_screen.dart';
-
+import 'home_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -56,11 +58,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
             TextButton(
               onPressed: () {
-                _controller.jumpToPage(2);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HomeScreen(),
+                  ),
+                );
               },
-              style: TextButton.styleFrom(
-                foregroundColor: Colors.grey[400],
-              ),
               child: const Text('Skip'),
             ),
           ],
@@ -158,14 +162,26 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     ],
                   ),
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (currentPage < 2) {
                         _controller.nextPage(
                           duration: const Duration(milliseconds: 400),
                           curve: Curves.easeInOut,
                         );
                       } 
-                      else {}
+                      else {
+                            final prefs = await SharedPreferences.getInstance();
+                            await prefs.setBool('seenOnboard', true);
+
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => HomeScreen(),
+                              ),
+                            );
+
+                      }
+
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF00BBA7), 
